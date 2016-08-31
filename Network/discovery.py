@@ -140,8 +140,8 @@ class Discovery():
             self.callerSend = CallerSend(
                 info.getHostName(), 
                 info.getLocalIp(), 
-                mcast_grp, 
-                mcast_port, 
+                multicastGroup, 
+                multicastPort, 
                 logger
             )
             self.callerRecv = CallerRecv(
