@@ -59,7 +59,7 @@ def init_responder(listener_grp, listener_port, response_port, callback):
         listener_grp,
         listener_port, 
         response_port, 
-        info.getLocalIP(), 
+        info.getLocalIp(), 
         callback
     )
     responder.start()
@@ -139,7 +139,7 @@ class Discovery():
         if self.role == "caller":
             self.callerSend = CallerSend(
                 info.getHostName(), 
-                info.getLocalIP(), 
+                info.getLocalIp(), 
                 mcast_grp, 
                 mcast_port, 
                 logger
