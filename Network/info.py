@@ -3,16 +3,14 @@ import urllib2
 import socket
 
 def getLocalIp():
-    try:
-        return netifaces.ifaddresses("eth0")[netifaces.AF_INET][0]['addr']
-    except Exception as e:
-        print 'ethernet not available...'
-        pass
-    try:
-        print 'trying wifi...'
-        return netifaces.ifaddresses("wlan0")[netifaces.AF_INET][0]['addr']
-    except Exception as e:
-        pass
+    ifaces = netifaces.interfaces()
+    for iface in ifaces:
+        try:
+            ip = netifaces.ifaddresses(iface)[netifaces.AF_INET][0]['addr']
+            if ip[0:3] != "127":
+                return ip
+        except Exception as e:
+            print 'network %s not available...' % (iface)
     return False
 
 def getGlobalIp():

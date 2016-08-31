@@ -48,8 +48,10 @@ class Responder(threading.Thread):
                 msg_json = self.sock.recv(1024)
                 self.logger("trace","Thirtybirds.Network.discovery:Responder.run","Device Discovered:%s" % (msg_json),None)
                 msg_d = json.loads(msg_json)
+                print msg_d 
                 remoteIP = msg_d["ip"]
-                resp_d = self.callback(msg_d)
+                if self.callback:
+                    resp_d = self.callback(msg_d)
                 resp_json = json.dumps( {"ip":self.localIP,"hostname":socket.gethostname()})
                 self.response(remoteIP,resp_json)
 
