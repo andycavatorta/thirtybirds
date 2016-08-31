@@ -145,7 +145,7 @@ class Discovery():
                 logger
             )
             self.callerRecv = CallerRecv(
-                recv_port, 
+                responsePort, 
                 self.status_callback, 
                 self.callerSend, 
                 logger
