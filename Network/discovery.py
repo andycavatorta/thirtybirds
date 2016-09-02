@@ -8,7 +8,11 @@ import socket
 import struct
 import threading
 import time
+import yaml
 import zmq
+
+
+
 
 def callerSend(start_stop):
     logger("info","Thirtybirds.Network.discovery:callerSend","global reference called before initialized",None)
@@ -46,15 +50,18 @@ class Responder(threading.Thread):
     def run(self):
         while True:
                 msg_json = self.sock.recv(1024)
-                self.logger("trace","Thirtybirds.Network.discovery:Responder.run","Device Discovered:%s" % (msg_json),None)
-                msg_d = json.loads(msg_json)
-                print msg_d 
+                self.logger("trace","Thirtybirds.Network.discovery:Responder.run","device_discovered:%s" % (msg_json),None)
+                #msg_d = json.loads(msg_json)
+                msg_d = yaml.safe_load(msg_json)
+                #print msg_d 
                 remoteIP = msg_d["ip"]
+                msg_d["status"] = "device_discovered"
                 if self.callback:
                     resp_d = self.callback(msg_d)
                 resp_json = json.dumps( {"ip":self.localIP,"hostname":socket.gethostname()})
                 self.response(remoteIP,resp_json)
 
+"""
 def init_responder(listener_grp, listener_port, response_port, callback):
     print "listening for multicast on port" , listener_port, "in multicast group", listener_grp
     responder = Responder(
@@ -65,7 +72,7 @@ def init_responder(listener_grp, listener_port, response_port, callback):
         callback
     )
     responder.start()
-
+"""
 
 ##################
 ##### CALLER #####
@@ -109,8 +116,10 @@ class CallerRecv(threading.Thread):
     def run(self):
         while True:
             msg_json = self.listen_sock.recv()
-            msg_d = json.loads(msg_json)
-            print msg_json
+            msg_d = yaml.safe_load(msg_json)
+            #msg_d = json.loads(msg_json)
+            #print msg_json
+            msg_d["status"] = "device_discovered"
             if self.callback:
                 self.callback(msg_d)
             self.callerSend.set_active("stop")
