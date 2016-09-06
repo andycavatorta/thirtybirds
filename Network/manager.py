@@ -1,22 +1,7 @@
-
 """
-This start file starts and manages three network services - discovery, pubsub, and heartbeat.  
-Each is dependent upon the former.  
+manager.py initializes and coordinates the interconnected network functions: discovery, pubsub, and heartbeat
 
-
-states:
-
-discovery.caller - never connected
-    start calling
-discovery.caller - connected
-    stop calling
-    send data to callback
-discovery.caller - disconnected
-    start calling
-
-events: no response
-    set state to disconnected
-
+One should be able to simply invoke these 
 
 """
 
@@ -42,8 +27,7 @@ class Manager(threading.Thread):
             discovery_responsePort,
             pubsub_pubPort,
             message_callback,
-            status_callback,
-            logger
+            status_callback
         ):
         threading.Thread.__init__(self)
 
@@ -54,7 +38,6 @@ class Manager(threading.Thread):
         self.pubsub_pubPort = pubsub_pubPort
         self.message_callback = message_callback
         self.status_callback = status_callback
-        self.logger = logger
         self.server_ip = ""
         self.publishers = {}
         #self.connected = False
@@ -64,18 +47,15 @@ class Manager(threading.Thread):
             discovery_multicastGroup, 
             discovery_multicastPort, 
             discovery_responsePort, 
-            self.local_discovery_status_callback,
-            logger
+            self.local_discovery_status_callback
             )
         self.pubsub = pubsub.init(
             pubsub_pubPort, 
             self.pubsub_callback,
-            self.local_discovery_status_callback,
-            logger
+            self.local_discovery_status_callback
             )
         self.heartbeat = heartbeat.init(
-            self.pubsub,
-            logger
+            self.pubsub
             )
 
     def local_discovery_status_callback(self,msg):
@@ -113,14 +93,16 @@ class Manager(threading.Thread):
                 if self.publishers[publisher_hostname]["connected"] != alive: # detect a change is heartbeat status
                     self.publishers[publisher_hostname]["connected"] = alive
                     if alive: # if a publisher has just come back online.
-                        self.logger("trace","Thirtybirds.Network.manager:Manager","publisher %s connected" % (publisher_hostname),None)
+                        pass
+                        #self.logger("trace","Thirtybirds.Network.manager:Manager","publisher %s connected" % (publisher_hostname),None)
                     else: # if a publisher has just gone offline
-                        self.logger("trace","Thirtybirds.Network.manager:Manager","publisher %s disconected" % (publisher_hostname),None)
+                        #self.logger("trace","Thirtybirds.Network.manager:Manager","publisher %s disconected" % (publisher_hostname),None)
+                        pass
                         if self.role == "caller":
-                            self.logger("trace","Thirtybirds.Network.manager:Manager","starting discovery",None)
+                            #self.logger("trace","Thirtybirds.Network.manager:Manager","starting discovery",None)
                             self.discovery.begin()
-                        else: # if role == "responder"
-                            self.logger("trace","Thirtybirds.Network.manager:Manager","lisening for new connection from %s" % (publisher_hostname),None)
+                        #else: # if role == "responder"
+                        #    self.logger("trace","Thirtybirds.Network.manager:Manager","lisening for new connection from %s" % (publisher_hostname),None)
             time.sleep(2)
 
 def init(
@@ -130,8 +112,7 @@ def init(
         discovery_responsePort,
         pubsub_pubPort,
         message_callback,
-        status_callback,
-        logger
+        status_callback
     ):
     r = "caller" if role == "client" else "responder"
     m = Manager(
@@ -144,8 +125,7 @@ def init(
         discovery_responsePort,
         pubsub_pubPort,
         message_callback,
-        status_callback,
-        logger
+        status_callback
     )
     m.start()
     return m
