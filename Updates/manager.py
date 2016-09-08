@@ -65,6 +65,7 @@ class Updates():
 
 def init(local_path, runGithubSync = False, runBashScripts = False):
     updates = Updates(local_path, runGithubSync, runBashScripts)
+    updates.reset_version_pickle()
     ghStatus = ""
     bsStatus = []
     if runGithubSync:
