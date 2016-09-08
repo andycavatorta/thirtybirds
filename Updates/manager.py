@@ -23,7 +23,7 @@ class Updates():
 
     def run_github_sync(self):
         cmd = "cd %s && git pull -q --all -p" % (self.local_path)
-        run_bash_command(cmd)
+        self.run_bash_command(cmd)
 
     def make_version_pickle(self):
         if not os.path.isfile(self.version_pickle_path):
@@ -54,13 +54,14 @@ class Updates():
         import upgradeScripts
         v_l =  upgradeScripts.scripts.keys()
         v_l.sort(key=float)
-        output = []
+        msg = []
+        versionFromPickle = self.read_version_pickle()
         for version in v_l:
             if float(version) >= versionFromPickle:
                 for script in upgradeScripts.scripts[version]:
                     status, output = self.run_bash_command(script)
-                    output.append(version, status, output)
-        return output
+                    msg.append((version, status, output))
+        return msg
 
 def init(local_path, runGithubSync = False, runBashScripts = False):
     updates = Updates(local_path, runGithubSync, runBashScripts)
