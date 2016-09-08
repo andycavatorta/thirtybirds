@@ -5,3 +5,4 @@ netifaces
 zeromq
 pip
 pyzmq
+yaml
