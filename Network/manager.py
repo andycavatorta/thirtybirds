@@ -18,6 +18,7 @@ import time
 class Manager(threading.Thread):
     def __init__(
             self, 
+            hostname,
             role,
             discovery,
             pubsub,
@@ -31,6 +32,7 @@ class Manager(threading.Thread):
         ):
         threading.Thread.__init__(self)
 
+        self.hostname = hostname
         self.role = role
         self.discovery_multicastGroup = discovery_multicastGroup
         self.discovery_multicastPort = discovery_multicastPort
@@ -43,6 +45,7 @@ class Manager(threading.Thread):
         #self.connected = False
         # initialize discovery, pubsub, heartbeat
         self.discovery = discovery.init(
+            self.hostname,
             self.role,
             discovery_multicastGroup, 
             discovery_multicastPort, 
@@ -50,11 +53,13 @@ class Manager(threading.Thread):
             self.local_discovery_status_callback
             )
         self.pubsub = pubsub.init(
+            self.hostname,
             pubsub_pubPort, 
             self.pubsub_callback,
             self.local_discovery_status_callback
             )
         self.heartbeat = heartbeat.init(
+            self.hostname,
             self.pubsub
             )
 
@@ -106,6 +111,7 @@ class Manager(threading.Thread):
             time.sleep(2)
 
 def init(
+        hostname,
         role,
         discovery_multicastGroup,
         discovery_multicastPort,
@@ -116,6 +122,7 @@ def init(
     ):
     r = "caller" if role == "client" else "responder"
     m = Manager(
+        hostname,
         r,
         discovery,
         pubsub,
@@ -129,4 +136,3 @@ def init(
     )
     m.start()
     return m
-

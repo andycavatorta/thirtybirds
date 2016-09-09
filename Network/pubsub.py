@@ -8,6 +8,9 @@ import zmq
 
 from thirtybirds.Logs.main import ExceptionCollector
 
+from thirtybirds.Network.info import init as network_info_init
+network_info = network_info_init()
+
 class Subscription():
     @ExceptionCollector("Thirtybirds.Network.pubsub Subscription.__init__")
     def __init__(self, hostname, remote_ip, remote_port):
@@ -18,13 +21,13 @@ class Subscription():
 
 class PubSub(threading.Thread):
     @ExceptionCollector("Thirtybirds.Network.pubsub PubSub.__init__")
-    def __init__(self, publish_port, recvCallback, netStateCallback):
+    def __init__(self, hostname, publish_port, recvCallback, netStateCallback):
         threading.Thread.__init__(self)
         self.publish_port = publish_port
         self.recvCallback = recvCallback 
         self.netStateCallback = netStateCallback 
-        self.hostname = info.getHostName()
-        self.ip = info.getLocalIp()
+        self.hostname = hostname
+        self.ip = network_info.getLocalIp()
         self.context = zmq.Context()
         self.pub_socket = self.context.socket(zmq.PUB)
         self.pub_socket.bind("tcp://*:%s" % publish_port)
@@ -58,7 +61,7 @@ class PubSub(threading.Thread):
             self.recvCallback(topic, msg)
                 
 @ExceptionCollector("Thirtybirds.Network.pubsub init")
-def init(publish_port, recvCallback, netStateCallback):
-    ps = PubSub(publish_port, recvCallback, netStateCallback)
+def init(hostname, publish_port, recvCallback, netStateCallback):
+    ps = PubSub(hostname, publish_port, recvCallback, netStateCallback)
     ps.start()
     return ps

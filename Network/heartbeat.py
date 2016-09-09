@@ -20,10 +20,10 @@ class Publisher():
 
 class Heartbeat(threading.Thread):
     @ExceptionCollector("Thirtybirds.Network.heartbeat Heartbeat.__init__")
-    def __init__(self, pubsub):
+    def __init__(self, hostname, pubsub):
         threading.Thread.__init__(self)
         self.topic = "__heartbeat__"
-        self.hostname = info.getHostName()
+        self.hostname = hostname
         self.pubsub = pubsub
         self.publishers = {}
     @ExceptionCollector("Thirtybirds.Network.heartbeat Heartbeat.subscribe")
@@ -44,7 +44,7 @@ class Heartbeat(threading.Thread):
             time.sleep(2)
 
 @ExceptionCollector("Thirtybirds.Network.heartbeat init")
-def init(pubsub):
-    hb = Heartbeat(pubsub)
+def init(hostname, pubsub):
+    hb = Heartbeat(hostname, pubsub)
     hb.start()
     return hb

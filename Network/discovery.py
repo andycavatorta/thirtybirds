@@ -13,6 +13,9 @@ import zmq
 
 from thirtybirds.Logs.main import ExceptionCollector
 
+from thirtybirds.Network.info import init as network_info_init
+network_info = network_info_init()
+
 #####################
 ##### RESPONDER #####
 #####################
@@ -120,6 +123,7 @@ class Discovery():
     @ExceptionCollector("Thirtybirds.Network.discover Discovery.__init__")
     def __init__(
             self,
+            hostname,
             role,
             multicastGroup,
             multicastPort, 
@@ -127,6 +131,7 @@ class Discovery():
             status_callback
         ):
         self.role = role
+        self.hostname = hostname
         self.multicastGroup = multicastGroup
         self.multicastPort = multicastPort
         self.responsePort = responsePort
@@ -136,8 +141,8 @@ class Discovery():
 
         if self.role == "caller":
             self.callerSend = CallerSend(
-                info.getHostName(), 
-                info.getLocalIp(), 
+                self.hostname, 
+                network_info.getLocalIp(), 
                 multicastGroup, 
                 multicastPort
             )
@@ -154,7 +159,7 @@ class Discovery():
                 self.multicastGroup,
                 self.multicastPort, 
                 self.responsePort, 
-                info.getLocalIp(), 
+                network_info.getLocalIp(), 
                 self.status_callback
             )
             self.responder.start()
@@ -179,6 +184,7 @@ class Discovery():
 
 @ExceptionCollector("Thirtybirds.Network.discover init")
 def init(
+        hostname,
         role,
         multicastGroup,
         multicastPort, 
@@ -186,6 +192,7 @@ def init(
         status_callback
     ):
     return Discovery(
+        hostname,
         role,
         multicastGroup,
         multicastPort, 

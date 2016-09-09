@@ -6,8 +6,6 @@ import sys
 
 import upgradeScripts
 
-
-
 class Updates():
     def __init__(self, local_path, runGithubSync = False, runBashScripts = False):
         self.local_path = local_path
