@@ -36,7 +36,7 @@ class Info():
 
     @ExceptionCollector("Thirtybirds.Network.info getOnlineStatus")
     def getOnlineStatus(self):
-        r = getGlobalIp()
+        r = self.getGlobalIp()
         return False if r==False else True
 
 def init():
