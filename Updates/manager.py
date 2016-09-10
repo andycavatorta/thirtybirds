@@ -21,7 +21,7 @@ class Updates():
 
     def run_github_sync(self):
         cmd = "cd %s && git pull -q --all -p" % (self.local_path)
-        self.run_bash_command(cmd)
+        return self.run_bash_command(cmd)
 
     def make_version_pickle(self):
         if not os.path.isfile(self.version_pickle_path):
