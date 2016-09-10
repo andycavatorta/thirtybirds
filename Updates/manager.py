@@ -66,6 +66,7 @@ def init(local_path, runGithubSync = False, runBashScripts = False):
     #   updates.reset_version_pickle()
     ghStatus = ""
     bsStatus = []
+    print "++++++++++", runGithubSync
     if runGithubSync:
         ghStatus = updates.run_github_sync()
     if runBashScripts:
