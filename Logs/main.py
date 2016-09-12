@@ -23,6 +23,7 @@ internal data formats:
 ###############################################################33
 
 import time
+import logging
 
 class ExceptionCollector_Trace(object):
     def __init__(self, path, errors = [], errorreturn = None):
@@ -67,10 +68,11 @@ class ExceptionCollector_Info(object):
         return returnfunction
 
 class ExceptionCollector_Quiet(object):
-    def __init__(self, path, errors = [], errorreturn = None):
+    def __init__(self, path, collect=False, errors = [], errorreturn = None):
         self.errors = errors
         self.errorreturn = errorreturn
         self.path = path
+        self.collect = collect
 
     def report(self, level, msg, stacktrace=None):
         print level, self.path, msg, stacktrace
@@ -78,6 +80,8 @@ class ExceptionCollector_Quiet(object):
     def __call__(self, function):
         def returnfunction(*args, **kwargs):
             try:
+                if self.collect:
+                    self.report("trace", "starting", None)
                 return function(*args, **kwargs)
             except Exception as E:
                 if type(E) not in self.errors:
