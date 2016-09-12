@@ -80,8 +80,8 @@ class ExceptionCollector_Quiet(object):
     def __call__(self, function):
         def returnfunction(*args, **kwargs):
             try:
-                if self.collect:
-                    self.report("trace", "starting", None)
+                #if self.collect:
+                #    self.report("trace", "starting", None)
                 return function(*args, **kwargs)
             except Exception as E:
                 if type(E) not in self.errors:
