@@ -124,5 +124,5 @@ def init(loglevel="quiet"):
     if loglevel == "silent":
         return ExceptionCollector_Silent
 
-ExceptionCollector = ExceptionCollector_Trace
+ExceptionCollector = ExceptionCollector_Quiet
 
