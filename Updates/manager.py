@@ -59,6 +59,7 @@ class Updates():
                 for script in upgradeScripts.scripts[version]:
                     status, output = self.run_bash_command(script)
                     msg.append((version, status, output))
+        self.write_version_pickle(v_l+1)
         return msg
 
 def init(local_path, runGithubSync = False, runBashScripts = False):
