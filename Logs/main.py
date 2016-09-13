@@ -39,9 +39,7 @@ class DecoratedMethod(object):
         def wrapper(*args, **kwargs):
             if self.func.__name__ not in self.ignore:
                 print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
-            #print "before"
             ret = self.func(obj, *args, **kwargs)
-            #print "after"
             return ret
         for attr in "__module__", "__name__", "__doc__":
             setattr(wrapper, attr, getattr(self.func, attr))
@@ -53,16 +51,14 @@ class DecoratedClassMethod(object):
     def __init__(self, func, ignore):
         self.func = func
         self.ignore = ignore
-        print 'papapapapa', self.ignore
 
     def __get__(self, obj, cls=None):
         @wraps(self.func)
         def wrapper(*args, **kwargs):
-            #print "before"
+            if self.func.__name__ not in self.ignore:
+                print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
             ret = self.func(*args, **kwargs)
-            #print "+++ Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
-            #print "after"
-            #return ret
+            return ret
         for attr in "__module__", "__name__", "__doc__":
             setattr(wrapper, attr, getattr(self.func, attr))
         return wrapper
@@ -72,13 +68,10 @@ def Exception_Collector(ignore=""):
         for name, meth in inspect.getmembers(cls):
             if inspect.ismethod(meth):
                 if inspect.isclass(meth.__self__):
-                    # meth is a classmethod
                     setattr(cls, name, DecoratedClassMethod(meth,ignore))
                 else:
-                    # meth is a regular method
                     setattr(cls, name, DecoratedMethod(meth,ignore))
             elif inspect.isfunction(meth):
-                # meth is a staticmethod
                 setattr(cls, name, DecoratedClassMethod(meth,ignore))
         return cls
     return _Exception_Collector
