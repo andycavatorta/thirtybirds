@@ -14,7 +14,9 @@ import heartbeat
 import pubsub
 import threading
 import time
+from thirtybirds.Logs.main import Exception_Collector
 
+@Exception_Collector()
 class Manager(threading.Thread):
     def __init__(
             self, 

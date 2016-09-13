@@ -2,13 +2,12 @@ import netifaces
 import urllib2
 import socket
 
-from thirtybirds.Logs.main import ExceptionCollector
+from thirtybirds.Logs.main import Exception_Collector
 
+@Exception_Collector()
 class Info():
-    @ExceptionCollector("Thirtybirds.Network.info __init__")
     def __init__(self):
         pass
-    @ExceptionCollector("Thirtybirds.Network.info getLocalIp")
     def getLocalIp(self):
         ifaces = netifaces.interfaces()
         for iface in ifaces:
@@ -20,21 +19,18 @@ class Info():
                 pass
         return False
 
-    @ExceptionCollector("Thirtybirds.Network.info getGlobalIp")
     def getGlobalIp(self):
         try:
             return urllib2.urlopen("http://icanhazip.com").read().strip()
         except Exception as e:
             return False
 
-    @ExceptionCollector("Thirtybirds.Network.info getHostName")
     def getHostName(self):
         try:
             return socket.gethostname()
         except Exception as e:
             return False
 
-    @ExceptionCollector("Thirtybirds.Network.info getOnlineStatus")
     def getOnlineStatus(self):
         r = self.getGlobalIp()
         return False if r==False else True

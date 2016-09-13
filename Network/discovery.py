@@ -11,7 +11,7 @@ import time
 import yaml
 import zmq
 
-from thirtybirds.Logs.main import ExceptionCollector
+from thirtybirds.Logs.main import Exception_Collector
 
 from thirtybirds.Network.info import init as network_info_init
 network_info = network_info_init()
@@ -20,8 +20,8 @@ network_info = network_info_init()
 ##### RESPONDER #####
 #####################
 
+@Exception_Collector()
 class Responder(threading.Thread):
-    @ExceptionCollector("Thirtybirds.Network.discover Responder.__init__")
     def __init__(self, listener_grp, listener_port, response_port, localIP, callback):
         threading.Thread.__init__(self)
         self.listener_port = listener_port
@@ -35,7 +35,6 @@ class Responder(threading.Thread):
         self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, self.mreq)
         self.IpTiming = {}
         #self.logger("trace","Thirtybirds.Network.discovery:Responder.__init__","Responder started",None)
-    @ExceptionCollector("Thirtybirds.Network.discover Responder.response")
     def response(self, remoteIP, msg_json): # response sends the local IP to the remote device
         if self.IpTiming.has_key(remoteIP):
             if self.IpTiming[remoteIP] + 6 > time.time():
@@ -47,7 +46,6 @@ class Responder(threading.Thread):
         socket.connect("tcp://%s:%s" % (remoteIP,self.response_port))
         socket.send(msg_json)
         socket.close()
-    @ExceptionCollector("Thirtybirds.Network.discover Responder.run")
     def run(self):
         while True:
                 msg_json = self.sock.recv(1024)
@@ -65,9 +63,8 @@ class Responder(threading.Thread):
 ##################
 ##### CALLER #####
 ##################
-
+@Exception_Collector()
 class CallerSend(threading.Thread):
-    @ExceptionCollector("Thirtybirds.Network.discover CallerSend.__init__")
     def __init__(self, localHostname, localIP, mcast_grp, mcast_port):
         threading.Thread.__init__(self)
         self.mcast_grp = mcast_grp
@@ -79,20 +76,17 @@ class CallerSend(threading.Thread):
         self.mcast_msg = self.msg_json
         self.active = True
         #self.logger("trace","Thirtybirds.Network.discovery:CallerSend.__init__","CallerSend started",None)
-    @ExceptionCollector("Thirtybirds.Network.discover CallerSend.set_active")
     def set_active(self,val):
         #self.logger("trace","Thirtybirds.Network.discovery:CallerSend.set_active",val,None)
         self.active = val
-    @ExceptionCollector("Thirtybirds.Network.discover CallerSend.run")
     def run(self):
         while True:
             if self.active == True:
                 #self.logger("trace","Thirtybirds.Network.discovery:CallerSend.run","calling to %s:%d" % (self.mcast_grp, self.mcast_port),None)                
                 self.mcast_sock.sendto(self.mcast_msg, (self.mcast_grp, self.mcast_port))
             time.sleep(5)
-
+@Exception_Collector()
 class CallerRecv(threading.Thread):
-    @ExceptionCollector("Thirtybirds.Network.discover CallerRecv.__init__")
     def __init__(self, recv_port, callback, callerSend):
         threading.Thread.__init__(self)
         self.callback = callback
@@ -103,7 +97,6 @@ class CallerRecv(threading.Thread):
         self.msg = ""
         self.server_ip = ""
         #self.logger("trace","Thirtybirds.Network.discovery:CallerRecv.__init__","CallerRecv listening on port %d" % (recv_port),None)
-    @ExceptionCollector("Thirtybirds.Network.discover CallerRecv.run")
     def run(self):
         while True:
             msg_json = self.listen_sock.recv()
@@ -118,9 +111,8 @@ class CallerRecv(threading.Thread):
 ###################
 ##### WRAPPER #####
 ###################
-
+@Exception_Collector()
 class Discovery():
-    @ExceptionCollector("Thirtybirds.Network.discover Discovery.__init__")
     def __init__(
             self,
             hostname,
@@ -166,23 +158,18 @@ class Discovery():
 
         #logger("trace","Thirtybirds.Network.discovery:Discovery","initialized as %s" % (self.role),None)
 
-    @ExceptionCollector("Thirtybirds.Network.discover Discovery.begin")
     def begin(self):
         self.callerSend.set_active(True)
 
-    @ExceptionCollector("Thirtybirds.Network.discover Discovery.end")
     def end(self):
         self.callerSend.set_active(False)
 
-    @ExceptionCollector("Thirtybirds.Network.discover Discovery.get_status")
     def get_status(self):
         return self.status
 
-    @ExceptionCollector("Thirtybirds.Network.discover Discovery.get_server_ip")
     def get_server_ip(self):
         return self.server_ip
 
-@ExceptionCollector("Thirtybirds.Network.discover init")
 def init(
         hostname,
         role,
