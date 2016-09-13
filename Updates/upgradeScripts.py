@@ -7,4 +7,11 @@ scripts = {
     "0.02":[
         "echo running upgrade scripts for version 0.02"
     ],
+    "0.03":[
+        "sudo apt-get update",
+        "sudo apt-get install build-essential python-pip python-dev python-smbus git",
+        "git clone https://github.com/adafruit/Adafruit_Python_GPIO.git",
+        "cd Adafruit_Python_GPIO",
+        "sudo python setup.py install"
+    ]
 }
