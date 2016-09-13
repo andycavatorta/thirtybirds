@@ -81,9 +81,11 @@ class Manager(threading.Thread):
         self.status_callback(msg)
 
     def pubsub_callback(self, msg, host):
-        print "pubsub_callback", msg, host
         if msg == "__heartbeat__":
             self.heartbeat.record_heartbeat(host)
+        else:
+            self.message_callback((msg, host))
+            #print "pubsub_callback", msg, host
 
     def subscribe_to_topic(self, topic):
         self.pubsub.subscribe_to_topic(topic)
