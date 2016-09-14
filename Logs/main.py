@@ -37,8 +37,8 @@ class DecoratedMethod(object):
     def __get__(self, obj, cls=None):
         @wraps(self.func) 
         def wrapper(*args, **kwargs):
-            if self.func.__name__ not in self.ignore:
-                print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
+            #if self.func.__name__ not in self.ignore:
+            #    print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
             ret = self.func(obj, *args, **kwargs)
             return ret
         for attr in "__module__", "__name__", "__doc__":
@@ -55,8 +55,8 @@ class DecoratedClassMethod(object):
     def __get__(self, obj, cls=None):
         @wraps(self.func)
         def wrapper(*args, **kwargs):
-            if self.func.__name__ not in self.ignore:
-                print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
+            #if self.func.__name__ not in self.ignore:
+            #    print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
             ret = self.func(*args, **kwargs)
             return ret
         for attr in "__module__", "__name__", "__doc__":
