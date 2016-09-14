@@ -5,7 +5,9 @@ import pickle
 import sys
 
 import upgradeScripts
+from thirtybirds.Logs.main import Exception_Collector
 
+@Exception_Collector()
 class Updates():
     def __init__(self, local_path, runGithubSync = False, runBashScripts = False):
         self.local_path = local_path

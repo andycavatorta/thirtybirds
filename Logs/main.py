@@ -26,6 +26,7 @@ import time
 import logging
 import inspect
 from functools import wraps
+import errorlog as elog
 
 
 class DecoratedMethod(object):
@@ -37,8 +38,8 @@ class DecoratedMethod(object):
     def __get__(self, obj, cls=None):
         @wraps(self.func) 
         def wrapper(*args, **kwargs):
-            #if self.func.__name__ not in self.ignore:
-            #    print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
+            if self.func.__name__ not in self.ignore:
+                elog.elog.loginfo("Path: %s , Class: %s , Function: %s , Arguments: %s,"%(cls.__module__,cls.__name__,self.func.__name__,args))
             ret = self.func(obj, *args, **kwargs)
             return ret
         for attr in "__module__", "__name__", "__doc__":
@@ -55,6 +56,8 @@ class DecoratedClassMethod(object):
     def __get__(self, obj, cls=None):
         @wraps(self.func)
         def wrapper(*args, **kwargs):
+            if self.func.__name__ not in self.ignore:
+                elog.elog.loginfo("Path: %s , Class: %s , Function: %s , Arguments: %s,"%(cls.__module__,cls.__name__,self.func.__name__,args))
             #if self.func.__name__ not in self.ignore:
             #    print ">>> Path: %s | Class: %s | Function: %s | Arguments: %s"%(cls.__module__,cls.__name__,self.func.__name__,args)
             ret = self.func(*args, **kwargs)
@@ -67,7 +70,7 @@ def Exception_Collector(ignore=""):
     def _Exception_Collector(cls):
         for name, meth in inspect.getmembers(cls):
             if inspect.ismethod(meth):
-                if inspect.isclass(meth.__self__):
+                if inspect.isclass(meth.im_self):
                     setattr(cls, name, DecoratedClassMethod(meth,ignore))
                 else:
                     setattr(cls, name, DecoratedMethod(meth,ignore))
@@ -77,7 +80,7 @@ def Exception_Collector(ignore=""):
     return _Exception_Collector
 
 
-# class ExceptionCollector_Trace(object):
+# class ExceptionCollector_Method(object):
 #     def __init__(self, path, errors = [], errorreturn = None):
 #         self.errors = errors
 #         self.errorreturn = errorreturn

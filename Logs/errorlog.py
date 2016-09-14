@@ -1,22 +1,29 @@
 import logging
 import smtplib
 from email.mime.text import MIMEText
+import os
 
 class Errorlog():
 
 	def __init__(self):
 		#Logging
-		self.LOG_FILENAME = "%s/pythonerror.log" % (LOG_PATH)
+		try:
+			LV_PATH = ("%s/LivingVariator/Logs")%(os.path.split(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))[0])
+			print LV_PATH
+		except Exception as e:
+			print "setting default path..."
+			LV_PATH = os.path.dirname(os.path.realpath(__file__))
+		self.LOG_FILENAME = "%s/lv_log.csv" % (LV_PATH)
 		self.logger = logging.getLogger("Python Error Log")
 		self.logger.setLevel(logging.DEBUG)
 		self.ch = logging.FileHandler(self.LOG_FILENAME)
 		self.ch.setLevel(logging.DEBUG)
-		self.formatter = logging.Formatter("%(asctime)s - %(name)s - Thread:%(thread)d - Process:%(process)d - %(message)s")
+		self.formatter = logging.Formatter("%(asctime)s,%(message)s")
 		self.ch.setFormatter(self.formatter)
 		self.logger.addHandler(self.ch)
 
-	def logerror(self):
-		self.logger.exception("ERROR:")
+	def loginfo(self, msg):
+		self.logger.info(msg)
 
 	def setEmail(self, frm, to, filename, user, pwd, server):
 		self.fromaddr = frm

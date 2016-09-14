@@ -16,7 +16,7 @@ import threading
 import time
 from thirtybirds.Logs.main import Exception_Collector
 
-@Exception_Collector()
+@Exception_Collector("pubsub_callback")
 class Manager(threading.Thread):
     def __init__(
             self, 

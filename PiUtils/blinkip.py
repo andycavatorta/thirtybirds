@@ -1,7 +1,9 @@
 import time
 import netifaces as ni
 import commands
+from thirtybirds.Logs.main import Exception_Collector
 
+@Exception_Collector()
 class Bip():
 
 	def _ledonoff(self,interval, rep):	
