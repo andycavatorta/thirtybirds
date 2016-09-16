@@ -46,6 +46,7 @@ class Manager(threading.Thread):
         self.publishers = {}
         #self.connected = False
         # initialize discovery, pubsub, heartbeat
+        print "initializing self.discovery"
         self.discovery = discovery.init(
             self.hostname,
             self.role,
@@ -54,12 +55,14 @@ class Manager(threading.Thread):
             discovery_responsePort, 
             self.local_discovery_status_callback
             )
+        print "initializing self.pubsub"
         self.pubsub = pubsub.init(
             self.hostname,
             pubsub_pubPort, 
             self.pubsub_callback,
             self.local_discovery_status_callback
             )
+        print "initializing self.heartbeat"
         self.heartbeat = heartbeat.init(
             self.hostname,
             self.pubsub
@@ -67,12 +70,17 @@ class Manager(threading.Thread):
 
     def local_discovery_status_callback(self,msg):
         #print "local_discovery_status_callback", repr(msg)
-        if msg["status"] == "device_discovered":
-            self.heartbeat.subscribe(msg["hostname"])
-            self.pubsub.connect_to_publisher(msg["hostname"], msg["ip"], self.pubsub_pubPort)
-            self.pubsub.subscribe_to_topic("__heartbeat__")
-            self.publishers[msg["hostname"]] = {"connected":False} # connected is not redundant here.  we use its state to detect changes to heartbeat status
-        self.status_callback(msg)
+        time.sleep(2)
+        if hasattr(self, "heartbeat"):
+            print 'in'
+            if msg["status"] == "device_discovered":
+                self.heartbeat.subscribe(msg["hostname"])
+                self.pubsub.connect_to_publisher(msg["hostname"], msg["ip"], self.pubsub_pubPort)
+                self.pubsub.subscribe_to_topic("__heartbeat__")
+                self.publishers[msg["hostname"]] = {"connected":False} # connected is not redundant here.  we use its state to detect changes to heartbeat status
+            self.status_callback(msg)
+        else:
+            print 'else'
 
     def local_pubsub_status_callback(self,msg):
         print "local_pubsub_status_callback", msg

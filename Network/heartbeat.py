@@ -38,6 +38,8 @@ class Heartbeat(threading.Thread):
             time.sleep(2)
 
 def init(hostname, pubsub):
+    print 'inside heartbeat init'
     hb = Heartbeat(hostname, pubsub)
     hb.start()
+    print 'after hb.start'
     return hb
