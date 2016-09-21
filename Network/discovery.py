@@ -178,6 +178,7 @@ def init(
         responsePort,
         status_callback
     ):
+    print 'inside discovery init'
     return Discovery(
         hostname,
         role,

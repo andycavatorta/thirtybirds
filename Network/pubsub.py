@@ -56,6 +56,7 @@ class PubSub(threading.Thread):
             self.recvCallback(topic, msg)
 
 def init(hostname, publish_port, recvCallback, netStateCallback):
+    print 'inside pubsub init'
     ps = PubSub(hostname, publish_port, recvCallback, netStateCallback)
     ps.start()
     return ps
