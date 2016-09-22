@@ -11,6 +11,6 @@ while True:
     for val in range(255):
         print "value=", val
         for ch in range (40):
-            dmx.set(10, val)
+            dmx.set(ch, val)
         #dmx.set(8, 0)
-        time.sleep(0.01)
+        time.sleep(0.1)

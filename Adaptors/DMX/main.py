@@ -1,3 +1,4 @@
+import os
 import serial
 import threading
 import time
@@ -52,7 +53,21 @@ class DMX(threading.Thread):
       self.send(self.make_frame())
       time.sleep(self.refreshPeriod)
 
-def init(usbId="/dev/serial/by-id/pci-ENTTEC_DMX_USB_PRO_ENS2NPU6-if00-port0", frame_size=512, universe=0, refreshPeriod=0.01):
+def get_dmx_interface(searchString):
+  for file in os.listdir("/dev/serial/by-id"):
+    if searchString in file:
+      return file
+  return ""
+
+
+def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.01):
+  dmxDeviceName = get_dmx_interface(devicePattern)
+  if dmxDeviceName=="":
+    print "DMX interface not found"
+    return False
+
+  usbId = "/dev/serial/by-id/%s" % (dmxDeviceName)
+  print usbId
   dmx = DMX(usbId, frame_size, universe, refreshPeriod)
   dmx.start()
   return dmx
