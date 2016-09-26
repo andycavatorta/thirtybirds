@@ -52,7 +52,7 @@ class Responder(threading.Thread):
                 #self.logger("trace","Thirtybirds.Network.discovery:Responder.run","device_discovered:%s" % (msg_json),None)
                 #msg_d = json.loads(msg_json)
                 msg_d = yaml.safe_load(msg_json)
-                #print msg_d 
+                print msg_d 
                 remoteIP = msg_d["ip"]
                 msg_d["status"] = "device_discovered"
                 if self.callback:

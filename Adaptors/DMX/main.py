@@ -45,7 +45,7 @@ class DMX(threading.Thread):
 
   def send(self, frame):
     if self.port:
-      print repr(frame)
+      #print repr(frame)
       self.port.write(frame)
 
   def run(self):
