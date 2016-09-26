@@ -20,7 +20,7 @@ network_info = network_info_init()
 ##### RESPONDER #####
 #####################
 
-@Exception_Collector()
+#@Exception_Collector()
 class Responder(threading.Thread):
     def __init__(self, listener_grp, listener_port, response_port, localIP, callback):
         threading.Thread.__init__(self)
