@@ -81,7 +81,7 @@ class Responder(threading.Thread):
 ##################
 ##### CALLER #####
 ##################
-@Exception_Collector()
+#@Exception_Collector()
 class CallerSend(threading.Thread):
     def __init__(self, localHostname, localIP, mcast_grp, mcast_port):
         threading.Thread.__init__(self)
@@ -103,7 +103,7 @@ class CallerSend(threading.Thread):
                 #self.logger("trace","Thirtybirds.Network.discovery:CallerSend.run","calling to %s:%d" % (self.mcast_grp, self.mcast_port),None)                
                 self.mcast_sock.sendto(self.mcast_msg, (self.mcast_grp, self.mcast_port))
             time.sleep(5)
-@Exception_Collector()
+#@Exception_Collector()
 class CallerRecv(threading.Thread):
     def __init__(self, recv_port, callback, callerSend):
         threading.Thread.__init__(self)
@@ -129,7 +129,7 @@ class CallerRecv(threading.Thread):
 ###################
 ##### WRAPPER #####
 ###################
-@Exception_Collector()
+#@Exception_Collector()
 class Discovery():
     def __init__(
             self,
