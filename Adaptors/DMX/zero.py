@@ -10,4 +10,4 @@ dmx = dmx_init(universe=0,frame_size=40)
 while True:
     for ch in range (40):
         dmx.set(ch, 0)
-        time.sleep(0.1)
+        time.sleep(0.5)

@@ -26,7 +26,7 @@ class DMX(threading.Thread):
       self.port.close()
 
   def set(self, channel, value):
-    self.frame[channel] = value
+    self.frame[channel-1] = value
 
   def get(self, channel):
     return self.frame[channel]
@@ -39,6 +39,7 @@ class DMX(threading.Thread):
     frame += chr((self.frame_size >> 8) & 0xFF)
     frame += chr(self.universe)
     for j in range(self.frame_size):
+      #print ">>>>>>>>>>>>>>>", self.frame[j]
       frame += chr(self.frame[j])
     frame += chr(EOM_VALUE)
     return frame
@@ -46,7 +47,11 @@ class DMX(threading.Thread):
   def send(self, frame):
     if self.port:
       #print repr(frame)
-      self.port.write(frame)
+      try:
+        self.port.write(frame)
+      except Exception as e:
+        print "SerialException", e
+        self.open()
 
   def run(self):
     while True:
@@ -60,8 +65,9 @@ def get_dmx_interface(searchString):
   return ""
 
 
-def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.01):
+def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.025):
   dmxDeviceName = get_dmx_interface(devicePattern)
+  
   if dmxDeviceName=="":
     print "DMX interface not found"
     return False
