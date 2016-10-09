@@ -36,47 +36,47 @@ class Responder(threading.Thread):
         self.IpTiming = {}
         #self.logger("trace","Thirtybirds.Network.discovery:Responder.__init__","Responder started",None)
     def response(self, remoteIP, msg_json): # response sends the local IP to the remote device
-        print "discovery.py Responder.response 0:", remoteIP, msg_json
+        #print "discovery.py Responder.response 0:", remoteIP, msg_json
         if self.IpTiming.has_key(remoteIP):
-            print "discovery.py Responder.response 1:"
+            #print "discovery.py Responder.response 1:"
             if self.IpTiming[remoteIP] + 6 > time.time():
-                print "discovery.py Responder.response 2:"
+                #print "discovery.py Responder.response 2:"
                 return
         else:
-            print "discovery.py Responder.response 3:"
+            #print "discovery.py Responder.response 3:"
             self.IpTiming[remoteIP] = time.time()
-            print "discovery.py Responder.response 4:"
+            #print "discovery.py Responder.response 4:"
         context = zmq.Context()
-        print "discovery.py Responder.response 5:"
+        #print "discovery.py Responder.response 5:"
         socket = context.socket(zmq.PAIR)
-        print "discovery.py Responder.response 6:"
+        #print "discovery.py Responder.response 6:"
         socket.connect("tcp://%s:%s" % (remoteIP,self.response_port))
-        print "discovery.py Responder.response 7:"
+        #print "discovery.py Responder.response 7:"
         socket.send(msg_json)
-        print "discovery.py Responder.response 8:"
+        #print "discovery.py Responder.response 8:"
         socket.close()
-        print "discovery.py Responder.response 9:"
+        #print "discovery.py Responder.response 9:"
     def run(self):
         while True:
-                print "discovery.py Responder.run 0:"
+                #print "discovery.py Responder.run 0:"
                 msg_json = self.sock.recv(1024)
                 #self.logger("trace","Thirtybirds.Network.discovery:Responder.run","device_discovered:%s" % (msg_json),None)
                 #msg_d = json.loads(msg_json)
-                print "discovery.py Responder.run 1:", msg_json
+                #print "discovery.py Responder.run 1:", msg_json
                 msg_d = yaml.safe_load(msg_json)
-                print "discovery.py Responder.run 2:", msg_d 
+                #print "discovery.py Responder.run 2:", msg_d 
                 remoteIP = msg_d["ip"]
-                print "discovery.py Responder.run 3:", remoteIP
+                #print "discovery.py Responder.run 3:", remoteIP
                 msg_d["status"] = "device_discovered"
-                print "discovery.py Responder.run 4:"
+                #print "discovery.py Responder.run 4:"
                 if self.callback:
                     print "discovery.py Responder.run 5:"
                     resp_d = self.callback(msg_d)
-                print "discovery.py Responder.run 6:"
+                #print "discovery.py Responder.run 6:"
                 resp_json = json.dumps( {"ip":self.localIP,"hostname":socket.gethostname()})
-                print "discovery.py Responder.run 6:", resp_json
+                #print "discovery.py Responder.run 6:", resp_json
                 self.response(remoteIP,resp_json)
-                print "discovery.py Responder.run 7:"
+                #print "discovery.py Responder.run 7:"
 
 ##################
 ##### CALLER #####
