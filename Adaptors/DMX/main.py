@@ -19,7 +19,7 @@ class DMX(threading.Thread):
     self.open()
 
   def open(self):
-    self.port = serial.Serial(self.usbId, 115200, timeout=1)
+    self.port = serial.Serial(self.usbId, 57600, timeout=1)
 
   def close(self):
     if self.port:
