@@ -15,7 +15,7 @@ class Send():
 	        self.smtpPort = smtpPort
 	        self.fromAddress = fromAddress
 	        self.password = password
-	    except Exception as e:
+    except Exception as e:
 	    	print "Exception in email_simple.Send.__init", e
 
     def send(self, toAddress, subject, body):
@@ -30,7 +30,7 @@ class Send():
 			server.login(self.fromAddress, self.password)
 			server.sendmail(self.fromAddress, toAddress, msg.as_string())
 			server.quit()
-	    except Exception as e:
+    except Exception as e:
 	    	print "Exception in email_simple.Send.send", e
 
 """
