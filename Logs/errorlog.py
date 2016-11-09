@@ -8,12 +8,15 @@ class Errorlog():
 	def __init__(self):
 		#Logging
 		try:
-			LV_PATH = ("%s/LivingVariator/Logs")%(os.path.split(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))[0])
-			print LV_PATH
+			LOG_PATH = ("%s/Logs")%(os.getcwd())
+			print LOG_PATH 
+			if not os.path.exists(LOG_PATH):
+				print 'Creating directory...'
+				os.makedirs(LOG_PATH)
 		except Exception as e:
 			print "setting default path..."
-			LV_PATH = os.path.dirname(os.path.realpath(__file__))
-		self.LOG_FILENAME = "%s/lv_log.csv" % (LV_PATH)
+			LOG_PATH = os.path.dirname(os.path.realpath(__file__))
+		self.LOG_FILENAME = "%s/log.csv" % (LOG_PATH)
 		self.logger = logging.getLogger("Python Error Log")
 		self.logger.setLevel(logging.DEBUG)
 		self.ch = logging.FileHandler(self.LOG_FILENAME)
