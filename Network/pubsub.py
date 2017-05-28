@@ -35,7 +35,8 @@ class PubSub(threading.Thread):
         self.subscriptions = {}
 
     def send(self, topic, msg):
-            self.pub_socket.send_string("%s %s" % (topic, msg))
+        print topic, msg
+        self.pub_socket.send_string("%s %s" % (topic, msg))
 
     def connect_to_publisher(self, hostname, remote_ip, remote_port):
             if hostname not in self.subscriptions:
