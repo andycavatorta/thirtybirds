@@ -43,7 +43,7 @@ class DMXConnection(object):
     Takes channel and value arguments to set a channel level in the local
     DMX frame, to be rendered the next time the render() method is called.
     '''
-    if not 1 <= chan-1 <= DMX_SIZE:
+    #if not 1 <= chan-1 <= DMX_SIZE:
 
     if chan-1 >= 0 and  DMX_SIZE>=chan-1:
 
