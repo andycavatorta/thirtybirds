@@ -47,7 +47,7 @@ class DMXConnection(object):
 
     if chan-1 >= 0 and  DMX_SIZE>=chan-1:
 
-      print 'Invalid channel specified: ', chan-1
+      print 'Invalid channel specified: ', chan-1, DMX_SIZE, chan-1 >= 0,  DMX_SIZE>=chan-1
       return
     # clamp value
     val = max(0, min(val, 255))
