@@ -45,7 +45,7 @@ class DMXConnection(object):
     '''
     #if not 1 <= chan-1 <= DMX_SIZE:
 
-    if chan-1 <= 0 or  DMX_SIZE<=chan-1:
+    if chan-1 < 0 or  DMX_SIZE<chan-1:
 
       print 'Invalid channel specified: ', chan-1, DMX_SIZE, chan-1 >= 0,  DMX_SIZE>=chan-1
       return
