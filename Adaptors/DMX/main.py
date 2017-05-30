@@ -19,7 +19,8 @@ class DMX(threading.Thread):
     self.open()
 
   def open(self):
-    self.port = serial.Serial(self.usbId, 57600, timeout=1)
+    self.port = serial.Serial(self.usbId, 19600, timeout=1)
+    #self.port = serial.Serial(self.usbId, 57600, timeout=1)
 
   def close(self):
     if self.port:
@@ -39,7 +40,6 @@ class DMX(threading.Thread):
     frame += chr((self.frame_size >> 8) & 0xFF)
     frame += chr(self.universe)
     for j in range(self.frame_size):
-      #print ">>>>>>>>>>>>>>>", self.frame[j]
       frame += chr(self.frame[j])
     frame += chr(EOM_VALUE)
     return frame
