@@ -19,8 +19,8 @@ class DMX(threading.Thread):
     self.open()
 
   def open(self):
-    self.port = serial.Serial(self.usbId, 9600, timeout=1)
-    #self.port = serial.Serial(self.usbId, 57600, timeout=1)
+    #self.port = serial.Serial(self.usbId, 9600, timeout=1)
+    self.port = serial.Serial(self.usbId, 57600, timeout=1)
 
   def close(self):
     if self.port:
@@ -65,7 +65,7 @@ def get_dmx_interface(searchString):
   return ""
 
 
-def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.025):
+def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.25):
   dmxDeviceName = get_dmx_interface(devicePattern)
   
   if dmxDeviceName=="":
