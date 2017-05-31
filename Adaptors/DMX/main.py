@@ -38,7 +38,7 @@ class DMX(threading.Thread):
     frame += chr(OUTPUT_ONLY_SEND_DMX_LABEL)
     frame += chr(self.frame_size & 0xFF)
     frame += chr((self.frame_size >> 8) & 0xFF)
-    frame += chr(self.universe)
+    #frame += chr(self.universe)
     for j in range(self.frame_size):
       frame += chr(self.frame[j])
     frame += chr(EOM_VALUE)
@@ -64,7 +64,6 @@ def get_dmx_interface(searchString):
       return file
   return ""
 
-
 def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.25):
   dmxDeviceName = get_dmx_interface(devicePattern)
   
@@ -73,7 +72,7 @@ def init(devicePattern="DMX", frame_size=512, universe=0, refreshPeriod=0.25):
     return False
 
   usbId = "/dev/serial/by-id/%s" % (dmxDeviceName)
-  print usbId
+  print "DMX controller found at:", usbId
   dmx = DMX(usbId, frame_size, universe, refreshPeriod)
   dmx.start()
   return dmx
