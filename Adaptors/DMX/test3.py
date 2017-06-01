@@ -27,13 +27,8 @@ while True:
 from main import init as dmx_init
 dmx = dmx_init(universe=0,frame_size=40)
 
-dmx.set(1, 255)
-time.sleep(60)
-
-"""
 while True:
-    dmx.set(1, 255)
+    dmx.set(2, 255)
     time.sleep(60)
-    dmx.set(1, 0)
+    dmx.set(2, 0)
     time.sleep(60)
-"""
