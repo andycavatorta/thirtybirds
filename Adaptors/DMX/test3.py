@@ -14,4 +14,4 @@ def test_cycle(channels,values,delay):
             time.sleep(0.01)
         time.sleep(delay)
 
-test_cycle([1,2,3,4],[0,255,0,255,0,255], 60)
+#test_cycle([1,2,3,4,5],[0,255,0,255,0,255], 60)
