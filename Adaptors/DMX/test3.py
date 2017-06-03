@@ -12,7 +12,7 @@
 import time
 import threading
 
-import simpledmx
+#import simpledmx
 
 """
 dmx = simpledmx.DMXConnection("/dev/serial/by-id/usb-ENTTEC_DMX_USB_PRO_EN211488-if00-port0")
@@ -28,7 +28,9 @@ from main import init as dmx_init
 dmx = dmx_init(universe=0,frame_size=40)
 
 while True:
+    dmx.set(1, 255)
     dmx.set(2, 255)
     time.sleep(60)
+    dmx.set(1, 0)
     dmx.set(2, 0)
     time.sleep(60)
