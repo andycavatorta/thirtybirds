@@ -38,7 +38,7 @@ class DMX(threading.Thread):
     frame += chr(OUTPUT_ONLY_SEND_DMX_LABEL)
     frame += chr(self.frame_size & 0xFF)
     frame += chr((self.frame_size >> 8) & 0xFF)
-    #frame += chr(self.universe)
+    frame += chr(self.universe)
     for j in range(self.frame_size):
       frame += chr(self.frame[j])
     frame += chr(EOM_VALUE)
