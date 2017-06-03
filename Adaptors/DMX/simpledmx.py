@@ -3,6 +3,7 @@ import serial, sys
 START_VAL   = 0x7E
 END_VAL     = 0xE7
 
+#COM_BAUD    = 9600
 COM_BAUD    = 57600
 COM_TIMEOUT = 1
 COM_PORT    = 7
@@ -79,7 +80,9 @@ class DMXConnection(object):
     packet.append(END_VAL)
 
     packet = map(chr, packet)
-    self.com.write(''.join(packet))
+    packet_str = ''.join(packet)
+    print packet_str
+    self.com.write(packet_str)
 
   def close(self):
     self.com.close()
