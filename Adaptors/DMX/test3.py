@@ -2,7 +2,10 @@
 import time
 import threading
 
-from main import init as dmx_init
+import simpledmx
+simpledmx.DMXConnection("/dev/ttyUSB0")
+
+from main3 import init as dmx_init
 dmx = dmx_init(universe=0,frame_size=40)
 
 def test_cycle(channels,values,delay):
@@ -12,3 +15,5 @@ def test_cycle(channels,values,delay):
             dmx.set(channel,value)
             time.sleep(0.01)
         time.sleep(delay)
+
+test_cycle([1,2,3,4],[0,255,0,255,0,255], 60)
